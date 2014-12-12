@@ -11,6 +11,8 @@ tic
 if nargin < 3 method = 2; end
 [n,dim] = size(data);
 
+disp('Setting up kmeans params!');
+
 if max(size(initcenters)) == 1
     k = initcenters;
     [centers, mincenter, mindist, lower, computed] = anchors(mean(data),k,data);
@@ -28,6 +30,8 @@ end
 nchanged = n;
 iteration = 0;
 oldmincenter = zeros(n,1);
+
+disp('KMEANS initialized!');
 
 while nchanged > 0
     % do one E step, then one M step
@@ -76,6 +80,7 @@ while nchanged > 0
         mcm = mincenter(mobile);
  
         for j = 1:k
+            disp(['Computer center number: ', num2str(j)]);
 % the following is incorrect: for j = unique(mcm)'
             track = find(mdm > centdist(mcm,j));
             if isempty(track) continue; end
@@ -181,7 +186,7 @@ quality = mean(udist);
 q2 = mean(udist.^2);
 [iteration toc quality q2 total];
 
-
+disp('Sorting kmeans centers');
 % sort centers by frequency
 h=histc(mincenter,1:max(mincenter));
 [vcs,ics]=sort(-h);
